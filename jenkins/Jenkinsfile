@@ -3,7 +3,7 @@ pipeline {
     stages{
         stage("Build-Backend"){
             agent{
-                Docker {
+                docker {
                     image 'snakee/golang-junit:1.20'
                     reuseNode true
                 }
@@ -16,7 +16,7 @@ pipeline {
         }
         stage("Test-Frontend"){
             agent{
-                Docker {
+                docker {
                     image 'node:20-alpine'
                     reuseNode true
                 }
