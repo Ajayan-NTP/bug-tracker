@@ -2,20 +2,14 @@ pipeline {
     agent none
 
     stages {
-        stage("Build-Backend") {
-            agent {
-                docker {
-                    image 'snakee/golang-junit:1.21'
-                    reuseNode true
-                }
-            }
+         stage("Build-Backend") {
             steps {
-                dir('backend') {
-                    sh 'go test -v ./...'
-                }
+                bat '''
+                    docker pull golang:1.21
+                    docker run --rm -v %cd%:/app -w /app/backend golang:1.21 sh -c "go test -v ./..."
+                '''
             }
         }
-
         stage("Test-Frontend") {
             agent {
                 docker {
