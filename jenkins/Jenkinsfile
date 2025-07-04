@@ -15,7 +15,7 @@ pipeline {
             steps {
                 bat '''
                     docker pull node:20-alpine
-                    docker run --rm -v %cd%:/app -w /app/frontend node:20-alpine sh -c "npm ci && npm test"
+                    docker run --rm -v %cd%:/app -w /app/bugtracker-frontend node:20-alpine sh -c "npm ci && npm test"
                 '''
             }
         }
