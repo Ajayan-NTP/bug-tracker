@@ -2,7 +2,8 @@ pipeline {
     agent none
 
     stages {
-         stage("Build-Backend") {
+        stage("Build-Backend") {
+            agent any
             steps {
                 bat '''
                     docker pull golang:1.21
@@ -10,28 +11,15 @@ pipeline {
                 '''
             }
         }
+
         stage("Test-Frontend") {
-            agent {
-                docker {
-                    image 'node:20-alpine'
-                    reuseNode true
-                }
-            }
+            agent any
             steps {
-                dir('frontend') {
-                    sh '''
-                        npm ci
-                        npm test
-                    '''
-                }
+                bat '''
+                    docker pull node:20-alpine
+                    docker run --rm -v %cd%:/app -w /app/frontend node:20-alpine sh -c "npm ci && npm test"
+                '''
             }
         }
-
-        // stage("Deploy") {
-        //     agent any
-        //     steps {
-        //         echo "Deploying the application"
-        //     }
-        // }
     }
 }
