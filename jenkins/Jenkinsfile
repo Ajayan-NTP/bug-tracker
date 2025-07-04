@@ -3,23 +3,41 @@ pipeline {
 
     stages {
         stage("Build-Backend") {
-            agent any
+            agent {
+                docker {
+                    image 'snakee/golang-junit:1.21'
+                    reuseNode true
+                }
+            }
             steps {
-                bat '''
-                    docker pull golang:1.21
-                    docker run --rm -v %cd%:/app -w /app/backend golang:1.21 sh -c "go test -v ./..."
-                '''
+                dir('bugtracker-backend') {
+                    sh 'go test -v ./...'
+                }
             }
         }
 
-        stage("Test-Frontend") {
-            agent any
+        stage("bugtracker-frontend") {
+            agent {
+                docker {
+                    image 'node:20-alpine'
+                    reuseNode true
+                }
+            }
             steps {
-                bat '''
-                    docker pull node:20-alpine
-                    docker run --rm -v %cd%:/app -w /app/frontend node:20-alpine sh -c "npm ci && npm test"
-                '''
+                dir('frontend') {
+                    sh '''
+                        npm ci
+                        npm test
+                    '''
+                }
             }
         }
+
+        // stage("Deploy") {
+        //     agent any
+        //     steps {
+        //         echo "Deploying the application"
+        //     }
+        // }
     }
 }
