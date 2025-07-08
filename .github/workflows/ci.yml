@@ -90,9 +90,20 @@ jobs:
         run: |
           npm ci
           npx playwright test 
+      
+      - name: Execute E2E Tests
+        working-directory: ./tests-e2e
+        run: |
+          npm ci
+          npx playwright install
+          npx playwright test 
       - name: stop application
         run: |
           docker compose down 
+      
+    
+
+
 
       - name: upload API test results
         if: always()
@@ -109,6 +120,22 @@ jobs:
           name: api-test-Playwright-results
           path: tests-api/playwright-report/
           retention-days: 30
+
+      - name: upload E2E test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: E2E-test-results
+          path: tests-e2e/test-results/
+          retention-days: 30
+      
+      - name: upload E2E-playwright test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: E2E-test-Playwright-results
+          path: tests-e2e/playwright-report/
+          retention-days: 30   
       
       
 
