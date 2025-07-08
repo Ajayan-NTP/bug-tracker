@@ -110,6 +110,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: api-test-results
+          
           path: tests-api/test-results/
           retention-days: 30
       
@@ -148,3 +149,11 @@ jobs:
           name: api-test-results    
           path: tests-api/test-results/*.xml
           reporter: jest-junit   
+
+      - name: Publish E2E test results
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: E2E-test-results
+          path: tests-e2e/test-results/*.xml
+          reporter: jest-junit
