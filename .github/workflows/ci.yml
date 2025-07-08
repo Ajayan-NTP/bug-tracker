@@ -74,16 +74,16 @@ jobs:
           reporter: jest-junit
 
   api-tests:
-    needs: unit-tests-frontend
-    runs-on: windows-latest
+    needs: [unit-tests-frontend, unit-tests-backend]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
      
-      - name: Start containers
-        run: docker compose up --build -d
-      - name: Wait for backend
-        run: npx wait-on http://localhost:8080/api/health -t 60000
+      - name: Start Application
+        run: |
+         docker compose up --build -d
+         npx wait-on http://localhost:8080/api/health -t 60000
 
       - name: Execute API Tests
         working-directory: ./tests-api
