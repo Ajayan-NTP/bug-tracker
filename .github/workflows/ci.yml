@@ -83,7 +83,7 @@ jobs:
       - name: Start Application
         run: |
          docker compose up --build -d
-         npx wait-on http://localhost:8080/api/health -t 60000
+        
 
       - name: Execute API Tests
         working-directory: ./tests-api
