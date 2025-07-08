@@ -79,10 +79,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Launch Application
-        run: |
-           docker compose up --build -d
-           npx wait-on http://localhost:8080/api/health -t 30000
+     
+      - name: Start containers
+        run: docker compose up --build -d
+      - name: Wait for backend
+        run: npx wait-on http://localhost:8080/api/health -t 60000
 
       - name: Execute API Tests
         working-directory: ./tests-api
