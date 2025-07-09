@@ -105,7 +105,7 @@ jobs:
         uses: grafana/run-k6-action@v1
        
         with:
-          script: ./tests-perf/script.js
+          path: ./tests-perf/script.js
           flags: --out json=summary.json
       - name: stop application
         run: |
@@ -157,11 +157,11 @@ jobs:
           path: ./tests-perf/summary.json
           retention-days: 30
       
-      - name: upload Performance-playwright test results
+      - name: upload Performance-K6 test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Performance-test-Playwright-results
+          name: Performance-test-K6-results
           path: ./tests-perf/perf-results.html
           retention-days: 30   
       
